@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список товаров</title>
+</head>
+<body>
+<h1>Список товаров</h1>
+<form action="/goods/add" method="post">
+    <input type="text" name="name" placeholder="Название" required>
+    <input type="number" step="0.01" name="price" placeholder="Цена" required>
+    <input type="radio" name="product" placeholder="Продукт?" required>
+    <input type="hidden" name="isDeleted" required>
+    <button type="submit">Добавить книгу</button>
+</form>
+
+<h2>Поиск по названию товара</h2>
+<form action="/goods/search" method="post">
+    <input type="text" name="name" placeholder="Название" required>
+    <button type="submit">Поиск</button>
+</form>
+
+<h2>Фильтрация товаров</h2>
+<form action="/goods/filter" method="post">
+    <select name="filterType" required>
+        <option value="1">Цена от 10 рублей</option>
+        <option value="2">Названия на А или A</option>
+        <option value="3">Цена до 118 рублей</option>
+    </select>
+    <button type="submit">Фильтровать</button>
+</form>
+
+<h2>Все товары:</h2>
+<form action="/goods/logic_deletes" method="post">
+<ul>
+    <th:block th:each="item : ${goods}">
+        <li>
+            <input type="checkbox" name="ids" th:value="${item.ID}">
+            <span th:text="${item.name} + ' ' + ${item.price} + ' '  + ${item.product}"></span>
+            <form action="/goods/update" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${item.ID}"/>
+                <input type="text" name="name" placeholder="Название" required>
+                <input type="number" step="0.01" name="price" placeholder="Цена" required>
+                <input type="radio" name="product" placeholder="Продукт?" required>
+                <input type="hidden" name="isDeleted" required>
+                <button type="submit">Обновить</button>
+            </form>
+            <form action="/goods/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${item.ID}"/>
+                <button type="submit">Удалить</button>
+            </form>
+            <form action="/goods/logic_delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${item.ID}"/>
+                <button type="submit">Логически удалить</button>
+            </form>
+        </li>
+    </th:block>
+    <button type="submit">Логически удалить выбранные товары</button>
+
+</ul>
+</form>
+
+<form action="/goods/restore" method="post">
+    <button type="submit">Восстановить удаленные данные</button>
+</form>
+
+<form action="/goods/deletes" method="post">
+    <button type="submit">Удалить данные подлежащие восстановлению</button>
+</form>
+
+</body>
+</html>

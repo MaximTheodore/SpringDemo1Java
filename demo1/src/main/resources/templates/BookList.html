@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список книг</title>
+</head>
+<body>
+<h1>Список книг</h1>
+<form action="/book/add" method="post">
+    <input type="text" name="name" placeholder="Название" required>
+    <input type="text" name="description" placeholder="Описание" required>
+    <input type="text" name="author" placeholder="Автор" required>
+    <input type="number" name="year" placeholder="Год издания" required>
+    <input type="hidden" name="isDeleted" required>
+    <button type="submit">Добавить книгу</button>
+</form>
+
+<h2>Поиск по названию книги</h2>
+<form action="/book/search" method="post">
+    <input type="text" name="name" placeholder="Название книги" required>
+    <button type="submit">Поиск</button>
+</form>
+
+<h2>Фильтрация книг</h2>
+<form action="/book/filter" method="post">
+    <select name="filterType" required>
+        <option value="1">Год издания от 2010</option>
+        <option value="2">Названия на А или A</option>
+        <option value="3">Имена авторов на А или A</option>
+    </select>
+    <button type="submit">Фильтровать</button>
+</form>
+
+<h2>Все книги:</h2>
+<form action="/book/logic_deletes" method="post">
+<ul>
+    <th:block th:each="boo : ${book}">
+        <li>
+            <input type="checkbox" name="ids" th:value="${boo.ID}">
+            <span th:text="${boo.name} + ' ' + ${boo.author} + ' '  + ${boo.year}"></span>
+            <form action="/book/update" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${boo.ID}"/>
+                <input type="text" name="name" placeholder="Название" required>
+                <input type="text" name="description" placeholder="Описание" required>
+                <input type="text" name="author" placeholder="Автор" required>
+                <input type="number" name="year" placeholder="Год издания" required>
+                <input type="hidden" name="isDeleted" required>
+                <button type="submit">Обновить</button>
+            </form>
+            <form action="/book/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${boo.ID}"/>
+                <button type="submit">Удалить</button>
+            </form>
+            <form action="/book/logic_delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${boo.ID}"/>
+                <button type="submit">Логически удалить</button>
+            </form>
+        </li>
+    </th:block>
+</ul>
+    <button type="submit">Логически удалить выбранные книги</button>
+</form>
+
+
+<form action="/book/restore" method="post">
+    <button type="submit">Восстановить удаленные данные</button>
+</form>
+
+<form action="/book/deletes" method="post">
+    <button type="submit">Удалить данные подлежащие восстановлению</button>
+</form>
+
+</body>
+</html>

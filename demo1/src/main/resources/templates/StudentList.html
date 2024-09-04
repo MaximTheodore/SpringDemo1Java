@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список студентов</title>
+</head>
+<body>
+<h1>Список студентов</h1>
+
+<form action="/students/add" method="post">
+    <input type="text" name="name" placeholder="Имя" required>
+    <input type="text" name="middleName" placeholder="Фамилия" required>
+    <input type="text" name="lastName" placeholder="Отчество" required>
+    <input type="number" name="age" placeholder="Возраст" required>
+    <button type="submit">Добавить студента</button>
+</form>
+
+<h2>Поиск по имени</h2>
+<form action="/students/search" method="post">
+    <input type="text" name="name" placeholder="Имя" required>
+    <button type="submit">Поиск</button>
+</form>
+
+<h2>Фильтрация студентов</h2>
+<form action="/students/filter" method="post">
+    <select name="filterType" required>
+        <option value="1">Возраст от 16 до 18</option>
+        <option value="2">Фамилии на А или A</option>
+        <option value="3">Имена на А или A</option>
+    </select>
+    <button type="submit">Фильтровать</button>
+</form>
+
+<h2>Все студенты:</h2>
+<form action="/students/logic_deletes" method="post">
+    <ul>
+    <th:block th:each="student : ${students}">
+        <li>
+            <input type="checkbox" name="ids" th:value="${student.ID}">
+            <span th:text="${student.name} + ' ' + ${student.middleName} + ' '  + ${student.lastName} + ' ' + ${student.age}"></span>
+            <form action="/students/update" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${student.ID}"/>
+                <input type="text" name="name" placeholder="Имя" required>
+                <input type="text" name="middleName" placeholder="Фамилия" required>
+                <input type="text" name="lastName" placeholder="Отчество" required>
+                <input type="number" name="age" placeholder="Возраст" required>
+                <input type="hidden" name="isDeleted" placeholder="Удалено?" required>
+                <button type="submit">Обновить</button>
+            </form>
+            <form action="/students/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${student.ID}"/>
+                <button type="submit">Удалить</button>
+            </form>
+            <form action="/students/logic_delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${student.ID}"/>
+                <button type="submit">Логически удалить</button>
+            </form>
+        </li>
+    </th:block>
+
+</ul>
+    <button type="submit">Логически удалить выбранных студентов</button>
+</form>
+
+<form action="/students/restore" method="post">
+    <button type="submit">Восстановить удаленные данные</button>
+</form>
+
+<form action="/students/deletes" method="post">
+    <button type="submit">Удалить данные подлежащие восстановлению</button>
+</form>
+
+</body>
+</html>
